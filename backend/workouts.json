@@ -1,0 +1,20 @@
+{
+  "2024-12-20": [
+    {
+      "area": "#Legs",
+      "title": "Back Squat",
+      "sets": 5,
+      "reps": 15,
+      "weight": 30,
+      "time": 10
+    },
+    {
+      "area": "#Legs",
+      "title": "Leg press",
+      "sets": 3,
+      "reps": 12,
+      "weight": 50,
+      "time": 10
+    }
+  ]
+}
