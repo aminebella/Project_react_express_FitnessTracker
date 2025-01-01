@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";// to define our
 // import { useSelector } from "react-redux";
 
 import Navbar from "./components/Navbar";
+
 import Dashboard from "./pages/Dashboard";
 import Workouts from "./pages/Workouts";
 import Home from "./pages/Home";
@@ -13,7 +14,6 @@ import Home from "./pages/Home";
 //container styled componenet
 const Container = styled.div`
   width: 100%;
-  height: 100vh;
   display: flex;
   flex-direction: column;
   background: ${({ theme }) => theme.bg};

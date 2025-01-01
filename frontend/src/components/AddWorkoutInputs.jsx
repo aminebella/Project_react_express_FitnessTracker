@@ -42,7 +42,7 @@ const AddWorkoutInputs= ({addNewWorkout, buttonLoading }) => {//,view
     setWorkout({ ...workout, [name]: value });
   };
   return (
-    <Card >
+    <Card >   
       <input
         name="area"
         placeholder="Area (e.g., #Legs)"

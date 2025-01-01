@@ -22,26 +22,26 @@ const writeData = (data) => fs.writeFileSync(filePath, JSON.stringify(data, null
 
 // Récupérer les workouts d'une date spécifique
 app.get("/workouts/:date", (req, res) => {
-  const date = req.params.date;
-  const data = readData();
-  res.json(data[date] || []);
+  const date = req.params.date; // Récupère la date passée dans l'URL.
+  const data = readData();// Lit les données du fichier JSON.
+  res.json(data[date] || []); // Renvoie les workouts de cette date ou un tableau vide.
 });
 
 // Ajouter un workout pour une date spécifique
 app.post("/workouts/:date", (req, res) => {
-  const date = req.params.date;
-  const workout = req.body;
-  const data = readData();
+  const date = req.params.date;// Récupère la date de l'URL.
+  const workout = req.body; // Récupère les données du workout envoyées dans le corps de la requête.
+  const data = readData(); // Lit les données existantes.
 
   if (!workout) {
     return res.status(400).json({ error: 'Workout data is missing' });
   }
 
-  if (!data[date]) data[date] = [];
-  data[date].push(workout);
+  if (!data[date]) data[date] = []; // Initialise un tableau pour cette date si elle n'existe pas.
+  data[date].push(workout); // Ajoute le nouveau workout au tableau correspondant à la date.
 
-  writeData(data);
-  res.json({ message: "Workout ajouté avec succès !" });
+  writeData(data); // Sauvegarde les données mises à jour dans le fichier JSON.
+  res.json({ message: "Workout ajouté avec succès !" }); // Envoie un message de confirmation.
 });
 
 // Modifier un workout pour une date spécifique
@@ -66,7 +66,7 @@ app.delete("/workouts/:date/:index", (req, res) => {
 
   if (data[date] && data[date][index]) {
     data[date].splice(index, 1);
-    if (data[date].length === 0) delete data[date]; // Supprimer la date si vide
+    if (data[date].length === 0) delete data[date]; // Supprime la date si elle ne contient plus de workouts.
     writeData(data);
     res.json({ message: "Workout supprimé avec succès !" });
   } else {

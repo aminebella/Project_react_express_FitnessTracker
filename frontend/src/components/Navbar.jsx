@@ -16,7 +16,7 @@ const Nav = styled.div`
   font-size: 1rem;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 999;
   color: white;
   border-bottom: 1px solid ${({ theme }) => theme.text_secondary + 20};
 `;

@@ -13,8 +13,24 @@ import { CircularProgress } from "@mui/material";//y
 import AddIcon from "@mui/icons-material/Add";
 import Fab from "@mui/material/Fab";
 
-import AddWorkoutTexterea from "../components/AddWorkoutTexterea";
+// import AddWorkoutTexterea from "../components/AddWorkoutTexterea";
 import AddWorkoutInputs from "../components/AddWorkoutInputs";
+import EditWorkoutInputs from "../components/EditWorkoutInputs";
+
+import EditIcon from "@mui/icons-material/Edit"; // Icône pour la modification
+
+const EditButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 40px; /* Décalé par rapport au bouton Delete */
+  background: none;
+  border: none;
+  color: blue;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
+`;
 
 const Container = styled.div`
   flex: 1;
@@ -97,6 +113,8 @@ const Workouts = () => {
     // }
     const [showAddForm, setShowAddForm] = useState(false);
 
+    const [showEditForm, setShowEditForm] = useState(false);
+
     //modification
     const [editingIndex, setEditingIndex] = useState(null); // Indice du workout à éditer
     const [editingWorkout, setEditingWorkout] = useState(null); // Données du workout à éditer
@@ -104,6 +122,7 @@ const Workouts = () => {
     const startEditingWorkout = (index) => {
       setEditingIndex(index); // Enregistrer l'indice du workout à éditer
       setEditingWorkout(todaysWorkouts[index]); // Charger les données du workout
+      setShowAddForm(!showAddForm);
     };
     //end    
 
@@ -112,6 +131,11 @@ const Workouts = () => {
     //pour gerer l'affichage du comp addworkout
     const toggleForm = () => {
       setShowAddForm(!showAddForm);
+    };
+      
+    //pour gerer l'affichage du comp addworkout
+    const toggleEditForm = () => {
+      setShowEditForm(!showEditForm);
     };
       
     
@@ -141,9 +165,11 @@ const Workouts = () => {
   };
 
   // Modifier un workout
-  const editWorkout = async (index, updatedWorkout) => {
+  const editWorkout = async ( index,updatedWorkout) => {//
     try {
       await axios.put(`http://localhost:8000/workouts/${date}/${index}`, updatedWorkout);
+      setEditingIndex(null); // Réinitialiser l'indice
+      setEditingWorkout(null); // Réinitialiser les données
       getTodaysWorkout(date); // Recharger les workouts après modification
     } catch (error) {
       console.error("Erreur de modification de workout", error);
@@ -195,6 +221,11 @@ const Workouts = () => {
             >
                     <AddIcon />
             </Fab>
+
+            {/* <EditButton onClick={() => toggleEditForm()}>
+              <EditIcon />
+            </EditButton> */}
+
             {
               showAddForm && <AddWorkoutInputs
                 //workout={newWorkout}  // Passe le nouvel état du workout
@@ -203,6 +234,22 @@ const Workouts = () => {
                 buttonLoading={loading}  // Indicateur de chargement
               />
             }
+            <div>
+            {showEditForm && (
+              <EditWorkoutInputs
+                workout={editingWorkout}
+                onSave={(updatedWorkout) => {
+                  editWorkout(updatedWorkout);
+                  toggleEditForm();
+                }}
+                onCancel={() => {
+                  setEditingIndex(null);
+                  setEditingWorkout(null);
+                  toggleEditForm();
+                }}
+              />
+              )}
+            </div>
             <Section>
               <SecTitle>Todays Workout: {date}</SecTitle>
               {loading ? (
@@ -210,7 +257,7 @@ const Workouts = () => {
               ) : (
                 <CardWrapper>
                   {todaysWorkouts.map((workout,index) => (
-                    <WorkoutCard workout={workout} index={index} deleteWorkout={deleteWorkout}/>
+                    <WorkoutCard workout={workout} index={index} deleteWorkout={deleteWorkout} editWorkout={startEditingWorkout}/>
                   ))}
                 </CardWrapper>
               )}
