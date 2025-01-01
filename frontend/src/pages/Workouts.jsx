@@ -13,7 +13,8 @@ import { CircularProgress } from "@mui/material";//y
 import AddIcon from "@mui/icons-material/Add";
 import Fab from "@mui/material/Fab";
 
-import AddWorkout from "../components/AddWorkout";
+import AddWorkoutTexterea from "../components/AddWorkoutTexterea";
+import AddWorkoutInputs from "../components/AddWorkoutInputs";
 
 const Container = styled.div`
   flex: 1;
@@ -84,15 +85,35 @@ const Workouts = () => {
     const [todaysWorkouts, setTodaysWorkouts] = useState([]);
     const [date, setDate] = useState("");
     const [loading, setLoading] = useState(false);
-    const [newWorkout, setNewWorkout] = useState({
-        area: "",
-        title: "",
-        // count: "",
-        sets: "",
-        reps: "",
-        weight:"",
-        duration: "",
-      });
+    // const [newWorkout, setNewWorkout] = useState("");
+    // {
+    //   area: "",
+    //   title: "",
+    //   // count: "",
+    //   sets: "",
+    //   reps: "",
+    //   weight:"",
+    //   duration: "",
+    // }
+    const [showAddForm, setShowAddForm] = useState(false);
+
+    //modification
+    const [editingIndex, setEditingIndex] = useState(null); // Indice du workout à éditer
+    const [editingWorkout, setEditingWorkout] = useState(null); // Données du workout à éditer
+
+    const startEditingWorkout = (index) => {
+      setEditingIndex(index); // Enregistrer l'indice du workout à éditer
+      setEditingWorkout(todaysWorkouts[index]); // Charger les données du workout
+    };
+    //end    
+
+
+
+    //pour gerer l'affichage du comp addworkout
+    const toggleForm = () => {
+      setShowAddForm(!showAddForm);
+    };
+      
     
   //Récupérer les workouts d'une date spécifique
     const getTodaysWorkout = async (date) => {
@@ -108,14 +129,11 @@ const Workouts = () => {
         }
     };
   
-    useEffect(() => {
-      if(date) getTodaysWorkout(date);
-    }, [date]);//charger les workouts
 
   // Ajouter un nouveau workout
-  const addTodaysWorkout = async () => {
+  const addTodaysWorkout = async (workout) => {
     try {
-      await axios.post(`http://localhost:8000/workouts/${date}`, newWorkout);
+      await axios.post(`http://localhost:8000/workouts/${date}`, workout);//{ workout: newWorkout }
       getTodaysWorkout(date); // Recharger les workouts après ajout
     } catch (error) {
       console.error("Erreur d'ajout de workout", error);
@@ -134,6 +152,9 @@ const Workouts = () => {
 
   // Supprimer un workout
   const deleteWorkout = async (index) => {
+    const confirmed = window.confirm("Êtes-vous sûr de vouloir supprimer ce workout ?");
+  if (!confirmed) return; // Si l'utilisateur annule, on arrête la fonction
+
     try {
       await axios.delete(`http://localhost:8000/workouts/${date}/${index}`);
       getTodaysWorkout(date); // Recharger les workouts après suppression
@@ -147,6 +168,10 @@ const Workouts = () => {
     setDate(`${e.$y}-${e.$M + 1}-${e.$D}`);
     getTodaysWorkout(date); // Charger les workouts pour cette date
   };
+
+  useEffect(() => {
+    if(date) getTodaysWorkout(date);
+  }, [date]);//charger les workouts
     
     return (
       <Container>
@@ -166,10 +191,18 @@ const Workouts = () => {
                     aria-label="add"
                     className="AddWorkout"
                     style={{ position: "relative" }}
-                    onClick={() =><AddWorkout workout={newWorkout} /> }
-                  >
+                    onClick={() =>toggleForm() }
+            >
                     <AddIcon />
-                  </Fab>
+            </Fab>
+            {
+              showAddForm && <AddWorkoutInputs
+                //workout={newWorkout}  // Passe le nouvel état du workout
+                //setWorkout={setNewWorkout}  // Permet de modifier cet état
+                addNewWorkout={addTodaysWorkout}  // Fonction pour ajouter un workout
+                buttonLoading={loading}  // Indicateur de chargement
+              />
+            }
             <Section>
               <SecTitle>Todays Workout: {date}</SecTitle>
               {loading ? (
@@ -177,7 +210,7 @@ const Workouts = () => {
               ) : (
                 <CardWrapper>
                   {todaysWorkouts.map((workout,index) => (
-                    <WorkoutCard workout={workout} index={index} />
+                    <WorkoutCard workout={workout} index={index} deleteWorkout={deleteWorkout}/>
                   ))}
                 </CardWrapper>
               )}

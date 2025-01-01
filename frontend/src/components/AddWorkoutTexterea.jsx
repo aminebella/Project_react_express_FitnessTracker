@@ -26,7 +26,7 @@ const Title = styled.div`
   }
 `;
 
-const AddWorkout = ({ workout, setWorkout, addNewWorkout, buttonLoading }) => {//,view
+const AddWorkoutTexterea = ({ workout, setWorkout, addNewWorkout, buttonLoading }) => {//,view
   //style={{display: view}}
   return (
     <Card >
@@ -57,4 +57,4 @@ const AddWorkout = ({ workout, setWorkout, addNewWorkout, buttonLoading }) => {/
   );
 };
 
-export default AddWorkout;
+export default AddWorkoutTexterea;

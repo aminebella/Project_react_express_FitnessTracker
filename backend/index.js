@@ -33,6 +33,10 @@ app.post("/workouts/:date", (req, res) => {
   const workout = req.body;
   const data = readData();
 
+  if (!workout) {
+    return res.status(400).json({ error: 'Workout data is missing' });
+  }
+
   if (!data[date]) data[date] = [];
   data[date].push(workout);
 

@@ -1,7 +1,8 @@
 import { FitnessCenterRounded, TimelapseRounded } from "@mui/icons-material";
 import React from "react";
 import styled from "styled-components";
-
+import DeleteIcon from "@mui/icons-material/Delete"; // Icône pour la suppression
+import EditIcon from "@mui/icons-material/Edit"; // Icône pour la modification
 
 const Card = styled.div`
   flex: 1;
@@ -14,6 +15,7 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   gap: 6px;
+  position: relative;
   @media (max-width: 600px) {
     padding: 12px 14px;
   }
@@ -52,9 +54,43 @@ const Details = styled.div`
   gap: 6px;
 `;
 
-const WorkoutCard = ({ workout,index }) => {
+const DeleteButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
+const EditButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 40px; /* Décalé par rapport au bouton Delete */
+  background: none;
+  border: none;
+  color: blue;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
+const WorkoutCard = ({ workout,index, deleteWorkout, editWorkout }) => {
   return (
     <Card index={index}>
+      <EditButton onClick={() => editWorkout(index)}>
+        <EditIcon />
+      </EditButton>
+      
+      <DeleteButton onClick={() => deleteWorkout(index)}>
+        <DeleteIcon />
+      </DeleteButton>
+
       <Category>#{workout?.area}</Category>
       <Name>{workout?.title}</Name>
       <Sets>

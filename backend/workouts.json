@@ -7,7 +7,27 @@
       "reps": 15,
       "weight": 30,
       "time": 10
+    }
+  ],
+  "2024-12-21": [
+    {
+      "area": "#Chest",
+      "title": "bench press",
+      "sets": 3,
+      "reps": 10,
+      "weight": 40,
+      "time": "15 min"
     },
+    {
+      "area": "back",
+      "title": "lat pull down",
+      "sets": "3",
+      "reps": "12",
+      "weight": "23",
+      "time": "15"
+    }
+  ],
+  "2024-12-22": [
     {
       "area": "#Legs",
       "title": "Leg press",
@@ -15,6 +35,16 @@
       "reps": 12,
       "weight": 50,
       "time": 10
+    }
+  ],
+  "2024-12-30": [
+    {
+      "area": "biceps",
+      "title": "curl",
+      "sets": "3",
+      "reps": "12",
+      "weight": "23",
+      "time": "23"
     }
   ]
 }
